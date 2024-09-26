@@ -2,6 +2,7 @@ import { storage } from "@/config/firebaseConfig";
 import axios from "axios";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { NextRequest, NextResponse } from "next/server";
+import { convertImage } from "@/lib/convertImage";
 
 export async function POST(req: NextRequest) {
   try {
@@ -32,19 +33,4 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// Function to convert image URL to base64
-export const convertImage = async (imageUrl: string) => {
-  try {
-    const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
 
-    // Detect the content type from the response headers
-    const contentType = response.headers['content-type'] || 'image/png';  // Default to PNG if content type is missing
-
-    // Convert image to base64
-    const base64Image = Buffer.from(response.data).toString('base64');
-    return base64Image;
-  } catch (error) {
-    console.error("Error converting image to base64:", error);
-    throw new Error('Image conversion failed');
-  }
-};
